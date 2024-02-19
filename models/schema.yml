@@ -13,7 +13,7 @@ models:
         description: NULL when a customer has not yet placed an order.
 
   - name: stg_customers
-    description: This model cleans up customer data
+    description: Staged customer data from our jaffle shop app.
     columns:
       - name: customer_id
         description: Primary key
@@ -22,7 +22,7 @@ models:
           - not_null
 
   - name: stg_orders
-    description: This model cleans up order data
+    description: Staged order data from our jaffle shop app.
     columns:
       - name: order_id
         description: Primary key
@@ -30,6 +30,7 @@ models:
           - unique
           - not_null
       - name: status
+        description: '{{doc("order_status")}}'
         tests:
           - accepted_values:
               values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
@@ -39,3 +40,15 @@ models:
           - relationships:
               to: ref('stg_customers')
               field: customer_id
+
+  - name: stg_payments
+    description: Staged payment data from Stripe transactions.
+    columns:
+      - name: payment_id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+      - name: amount
+        description: Transaction amount displayed as dollars
+              
